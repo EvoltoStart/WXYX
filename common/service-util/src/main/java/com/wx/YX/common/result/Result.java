@@ -28,6 +28,11 @@ public class Result<T> {
         }
         return result;
     }
+
+    public static<T> Result<T> ok(){
+
+        return build(null, ResultCodeEnum.SUCCESS);
+    }
     public static<T> Result<T> ok(T data){
         Result<T> result = build(data, ResultCodeEnum.SUCCESS);
 

@@ -1,6 +1,6 @@
 package com.wx.YX.vo.product;
 
-import com.atguigu.ssyx.model.product.*;
+import com.wx.YX.model.product.*;
 import com.wx.YX.model.product.SkuAttrValue;
 import com.wx.YX.model.product.SkuImage;
 import com.wx.YX.model.product.SkuInfo;

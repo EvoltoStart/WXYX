@@ -18,6 +18,7 @@ spring:
       max-lifetime: 1800000
       connection-timeout: 30000
 
+
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

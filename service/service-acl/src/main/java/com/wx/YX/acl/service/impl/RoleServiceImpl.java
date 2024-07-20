@@ -17,10 +17,6 @@ import org.springframework.util.StringUtils;
 
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
-
-
-
-
     //角色查询（条件分页查询）
     @Transactional
     @Override

@@ -14,6 +14,13 @@ public class Result<T> {
     private Result() {
 
     }
+    public static <T> Result<T> build(ResultCodeEnum resultCodeEnum) {
+        Result<T> result=new Result<>();
+        result.setCode(200);
+        result.setData(null);
+        result.setMessage(resultCodeEnum.getMessage());
+        return  result;
+    }
 
     //设置数据的方法
     public static <T> Result<T> build(T data, ResultCodeEnum resultCodeEnum) {
@@ -31,7 +38,7 @@ public class Result<T> {
 
     public static<T> Result<T> ok(){
 
-        return build(null, ResultCodeEnum.SUCCESS);
+        return build(ResultCodeEnum.SUCCESS);
     }
     public static<T> Result<T> ok(T data){
         Result<T> result = build(data, ResultCodeEnum.SUCCESS);

@@ -3,6 +3,7 @@ package com.wx.YX.acl.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wx.YX.acl.service.AdminService;
+import com.wx.YX.acl.service.RoleService;
 import com.wx.YX.common.result.Result;
 import com.wx.YX.model.acl.Admin;
 import com.wx.YX.vo.acl.AdminQueryVo;
@@ -12,7 +13,10 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.wx.YX.common.utils.MD5;
+
+import java.lang.ref.PhantomReference;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "用户接口")
 @RestController
@@ -21,17 +25,38 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private RoleService roleService;
+
+ //为用户分配角色
+    @ApiOperation(value = "为用户分配角色")
+    @PostMapping("/doAssign")
+    public Result doAssign(@RequestParam Long adminId,
+                           @RequestParam Long[] roleId) {
+        roleService.saveAdminRole(adminId,roleId);
+        return Result.ok();
+
+    }
+
+    //获取所有角色
+    @ApiOperation(value = "根据用户获取角色数据")
+    @GetMapping("/toAssign/{adminId}")
+    public Result toAssign(@PathVariable Long adminId) {
+        Map<String, Object> roleMap = roleService.getRoleByAdminId(adminId);
+        return Result.ok(roleMap);
+    }
+
     @ApiOperation("用户列表")
-    @GetMapping("{current}/{limit}")
+    @GetMapping("{page}/{limit}")
     public Result list(@ApiParam(name = "page", value = "当前页码", required = true)
-                       @PathVariable Long current,
+                       @PathVariable Long page,
 
                        @ApiParam(name = "limit", value = "每页记录数", required = true)
                        @PathVariable Long limit,
 
                        @ApiParam(name = "roleQueryVo", value = "查询对象", required = false)
                        AdminQueryVo adminQueryVo){
-        Page<Admin> pageParam=new Page<>(current,limit);
+        Page<Admin> pageParam=new Page<>(page,limit);
         IPage<Admin> pageModel=adminService.selectPage(pageParam,adminQueryVo);
         return Result.ok(pageModel);
     }
@@ -56,9 +81,7 @@ public class AdminController {
     public Result update(@RequestBody Admin admin){
 
         boolean update=adminService.updateById(admin);
-        if(update){
-            return Result.ok();
-        }else return Result.fail(null);
+        return Result.ok();
     }
     @ApiOperation("根据id删除用户")
     @DeleteMapping("remove/{id}")

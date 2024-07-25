@@ -2,6 +2,7 @@
 //
 package com.wx.YX.model.acl;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wx.YX.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -29,6 +30,7 @@ public class Permission extends BaseEntity {
 
 	@ApiModelProperty(value = "所属上级")
 	@TableField("pid")
+	@JsonProperty("parentid")
 	private Long pid;
 
 	@ApiModelProperty(value = "名称")

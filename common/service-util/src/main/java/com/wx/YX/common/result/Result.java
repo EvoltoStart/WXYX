@@ -14,31 +14,41 @@ public class Result<T> {
     private Result() {
 
     }
-    public static <T> Result<T> build(ResultCodeEnum resultCodeEnum) {
-        Result<T> result=new Result<>();
-        result.setCode(200);
-        result.setData(null);
-        result.setMessage(resultCodeEnum.getMessage());
-        return  result;
-    }
+    //写的不好
+//    public static <T> Result<T> build(ResultCodeEnum resultCodeEnum) {
+//        Result<T> result=new Result<>();
+//        result.setCode(200);
+//        result.setData(null);
+//        result.setMessage(resultCodeEnum.getMessage());
+//        return  result;
+//    }
 
     //设置数据的方法
     public static <T> Result<T> build(T data, ResultCodeEnum resultCodeEnum) {
         Result<T> result = new Result<>();
         if (data != null) {
             result.setData(data);
-            result.setCode(resultCodeEnum.getCode());
-            result.setMessage(resultCodeEnum.getMessage());
-        } else {
-            result.setCode(500);
-            result.setMessage("fail");
+
         }
+        result.setCode(resultCodeEnum.getCode());
+        result.setMessage(resultCodeEnum.getMessage());
+        return result;
+    }
+
+    public static <T> Result<T> build(T data,Integer code,String message) {
+        Result<T> result = new Result<>();
+        if (data != null) {
+            result.setData(data);
+
+        }
+        result.setCode(code);
+        result.setMessage(message);
         return result;
     }
 
     public static<T> Result<T> ok(){
 
-        return build(ResultCodeEnum.SUCCESS);
+        return build(null, ResultCodeEnum.SUCCESS);
     }
     public static<T> Result<T> ok(T data){
         Result<T> result = build(data, ResultCodeEnum.SUCCESS);

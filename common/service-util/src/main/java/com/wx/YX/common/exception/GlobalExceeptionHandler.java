@@ -19,6 +19,6 @@ public class GlobalExceeptionHandler {
     @ExceptionHandler(yxException.class)
     @ResponseBody
     public Result err(yxException e){
-        return Result.fail(null);
+        return Result.build(null,e.getCode(),e.getMessage());
     }
 }

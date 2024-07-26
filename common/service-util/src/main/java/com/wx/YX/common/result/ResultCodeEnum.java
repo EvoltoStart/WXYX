@@ -30,7 +30,10 @@ public enum ResultCodeEnum {
 
     SKU_LIMIT_ERROR(230, "购买个数不能大于限购个数"),
     REGION_OPEN(240, "该区域已开通"),
-    REGION_NO_OPEN(240, "该区域未开通"),
+    REGION_NO_OPEN(241, "该区域未开通"),
+    WARE_EXISTS(242,"仓库已存在"),
+
+    WARE_NOT_EXISTS(243,"仓库不存在"),
     ;
 
     private Integer code;

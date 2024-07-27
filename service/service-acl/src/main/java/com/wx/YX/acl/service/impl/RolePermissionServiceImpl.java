@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper, RolePermission> implements RolePermissionService {
+
     @Override
     public List<Long> getRolePermissionId(Long roleId) {
         LambdaQueryWrapper<RolePermission>wrapper=new LambdaQueryWrapper<>();

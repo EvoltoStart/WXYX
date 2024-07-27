@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PermissionHelper {
+
+    //构建用户菜单
     public static  List<Permission> buildRolePermission(List<Permission> allList,List<Long> ids){
         List<Permission> trees=new ArrayList<>();
         for (Permission permissionNode : allList) {

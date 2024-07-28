@@ -1,6 +1,6 @@
 package com.wx.YX.product.service.impl;
 
-import com.wx.YX.product.entity.SkuPoster;
+import com.wx.YX.model.product.SkuPoster;
 import com.wx.YX.product.mapper.SkuPosterMapper;
 import com.wx.YX.product.service.SkuPosterService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

@@ -1,6 +1,7 @@
 package com.wx.YX.product.service.impl;
 
-import com.wx.YX.product.entity.CommentReplay;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wx.YX.model.product.CommentReplay;
 import com.wx.YX.product.mapper.CommentReplayMapper;
 import com.wx.YX.product.service.CommentReplayService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

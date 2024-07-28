@@ -1,6 +1,6 @@
 package com.wx.YX.product.mapper;
 
-import com.wx.YX.product.entity.SkuPoster;
+import com.wx.YX.model.product.SkuPoster;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

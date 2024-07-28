@@ -1,5 +1,5 @@
 server:
-  port: 8890
+  port: 8892
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

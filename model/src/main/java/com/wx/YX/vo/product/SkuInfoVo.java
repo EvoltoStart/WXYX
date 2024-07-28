@@ -1,10 +1,8 @@
 package com.wx.YX.vo.product;
 
-import com.wx.YX.model.product.*;
-import com.wx.YX.model.product.SkuAttrValue;
-import com.wx.YX.model.product.SkuImage;
-import com.wx.YX.model.product.SkuInfo;
-import com.wx.YX.model.product.SkuPoster;
+
+
+
 import com.wx.YX.model.product.SkuAttrValue;
 import com.wx.YX.model.product.SkuImage;
 import com.wx.YX.model.product.SkuInfo;

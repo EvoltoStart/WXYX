@@ -1,6 +1,7 @@
 package com.wx.YX.product.service.impl;
 
-import com.wx.YX.product.entity.SkuAttrValue;
+
+import com.wx.YX.model.product.SkuAttrValue;
 import com.wx.YX.product.mapper.SkuAttrValueMapper;
 import com.wx.YX.product.service.SkuAttrValueService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

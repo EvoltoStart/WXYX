@@ -1,7 +1,13 @@
 package com.wx.YX.product.service;
 
-import com.wx.YX.product.entity.AttrGroup;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wx.YX.model.product.AttrGroup;
+import com.wx.YX.vo.product.AttrGroupQueryVo;
+import com.wx.YX.vo.product.CategoryQueryVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +19,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface AttrGroupService extends IService<AttrGroup> {
 
+
+    //平台属性分组列表
+    IPage<AttrGroup> selectPage(Page<AttrGroup> pageParam, AttrGroupQueryVo attrGroupQueryVo);
+
+    //查询所有属性分组
+    List<AttrGroup> findAllList();
 }

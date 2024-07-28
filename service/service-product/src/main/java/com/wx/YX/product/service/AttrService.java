@@ -1,7 +1,10 @@
 package com.wx.YX.product.service;
 
-import com.wx.YX.product.entity.Attr;
+
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wx.YX.model.product.Attr;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface AttrService extends IService<Attr> {
 
+    List<Attr> selectAttrList(Long groupId);
+
+    Object findByAttrGroupId(Long attrGroupId);
 }

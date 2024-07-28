@@ -1,7 +1,11 @@
 package com.wx.YX.product.service;
 
-import com.wx.YX.product.entity.SkuInfo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wx.YX.model.product.SkuInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wx.YX.vo.product.SkuInfoQueryVo;
+import com.wx.YX.vo.product.SkuInfoVo;
 
 /**
  * <p>
@@ -13,4 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SkuInfoService extends IService<SkuInfo> {
 
+    //获取sku分页列表
+    IPage<SkuInfo> selectPage(Page<SkuInfo> pageParam, SkuInfoQueryVo skuInfoQueryVo);
+    void saveSkuInfo(SkuInfoVo skuInfoVo);
 }

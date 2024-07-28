@@ -1,6 +1,6 @@
 package com.wx.YX.product.mapper;
 
-import com.wx.YX.product.entity.SkuStockHistory;
+import com.wx.YX.model.product.SkuStockHistory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

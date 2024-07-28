@@ -1,6 +1,6 @@
 package com.wx.YX.product.service;
 
-import com.wx.YX.product.entity.SkuStockHistory;
+import com.wx.YX.model.product.SkuStockHistory;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

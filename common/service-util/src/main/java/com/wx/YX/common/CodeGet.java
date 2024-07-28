@@ -47,7 +47,7 @@ public class CodeGet {
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
 
-        strategy.setInclude("attr","attr_group","category","comment","comment_replay","sku_attr_value","sku_images","sku_info","sku_poster","sku_stock_history"); //设置要映射的表名
+        strategy.setInclude("attr","attr_group","category","comment","comment_replay","sku_attr_value","sku_image","sku_info","sku_poster","sku_stock_history"); //设置要映射的表名
 
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
 

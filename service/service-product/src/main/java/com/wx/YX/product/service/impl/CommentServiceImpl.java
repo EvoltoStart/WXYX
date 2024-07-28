@@ -1,6 +1,6 @@
 package com.wx.YX.product.service.impl;
 
-import com.wx.YX.product.entity.Comment;
+import com.wx.YX.model.product.Comment;
 import com.wx.YX.product.mapper.CommentMapper;
 import com.wx.YX.product.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

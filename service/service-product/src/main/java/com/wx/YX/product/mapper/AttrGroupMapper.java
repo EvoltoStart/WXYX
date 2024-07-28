@@ -1,7 +1,8 @@
 package com.wx.YX.product.mapper;
 
-import com.wx.YX.product.entity.AttrGroup;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wx.YX.model.product.AttrGroup;
 
 /**
  * <p>

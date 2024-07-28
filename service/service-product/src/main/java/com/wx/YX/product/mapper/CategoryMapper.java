@@ -1,6 +1,6 @@
 package com.wx.YX.product.mapper;
 
-import com.wx.YX.product.entity.Category;
+import com.wx.YX.model.product.Category;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

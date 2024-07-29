@@ -154,7 +154,7 @@ export default {
   data() {
     return {
       // 接口API地址
-      BASE_API: 'http://localhost:8203',
+      BASE_API: 'http://localhost:8892',
 
       skuInfo: defaultForm,
       saveBtnDisabled: false,

@@ -3,3 +3,10 @@ spring:
     name: service-sys
   profiles:
     active: dev
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos

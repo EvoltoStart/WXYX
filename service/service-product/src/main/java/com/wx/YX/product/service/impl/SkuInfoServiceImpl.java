@@ -7,6 +7,8 @@ import com.wx.YX.model.product.SkuAttrValue;
 import com.wx.YX.model.product.SkuImage;
 import com.wx.YX.model.product.SkuInfo;
 import com.wx.YX.model.product.SkuPoster;
+import com.wx.YX.mq.constant.MqConst;
+import com.wx.YX.mq.sercvice.RabbitService;
 import com.wx.YX.product.mapper.SkuInfoMapper;
 import com.wx.YX.product.service.SkuAttrValueService;
 import com.wx.YX.product.service.SkuImageService;
@@ -49,6 +51,10 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
     //sku平台属性
     @Autowired
     private SkuAttrValueService skuAttrValueService;
+
+    //获取mq
+    @Autowired
+    private RabbitService rabbitService;
 
 
     //获取sku分页列表
@@ -214,12 +220,14 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
             skuInfoUp.setPublishStatus(1);
             baseMapper.updateById(skuInfoUp);
             //TODO 商品上架 后续会完善：发送mq消息更新es数据
+            rabbitService.sendMessage(MqConst.EXCHANGE_GOODS_DIRECT,MqConst.ROUTING_GOODS_UPPER,skuId);
         } else {
             SkuInfo skuInfoUp = new SkuInfo();
             skuInfoUp.setId(skuId);
             skuInfoUp.setPublishStatus(0);
             baseMapper.updateById(skuInfoUp);
             //TODO 商品下架 后续会完善：发送mq消息更新es数据
+            rabbitService.sendMessage(MqConst.EXCHANGE_GOODS_DIRECT,MqConst.ROUTING_GOODS_LOWER,skuId);
         }
     }
 

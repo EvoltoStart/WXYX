@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.wx.YX.vo.product.SkuInfoQueryVo;
 import com.wx.YX.vo.product.SkuInfoVo;
 
+import java.util.List;
+
 /**
  * <p>
  * sku信息 服务类
@@ -30,4 +32,9 @@ public interface SkuInfoService extends IService<SkuInfo> {
     void publish(Long skuId, Integer status);
 
     void isNewPerson(Long skuId, Integer status);
+
+
+    List<SkuInfo> findSkuInfoList(List<Long> skuIdList);
+
+    List<SkuInfo> findSkuInfoByKeyword(String keyword);
 }

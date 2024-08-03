@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -238,6 +239,17 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         skuInfoUp.setId(skuId);
         skuInfoUp.setIsNewPerson(status);
         baseMapper.updateById(skuInfoUp);
+    }
+
+    @Override
+    public List<SkuInfo> findSkuInfoList(List<Long> skuIdList) {
+
+       return baseMapper.selectBatchIds(skuIdList);
+    }
+
+    @Override
+    public List<SkuInfo> findSkuInfoByKeyword(String keyword) {
+       return baseMapper.selectList(new LambdaQueryWrapper<SkuInfo>().like(SkuInfo::getSkuName,keyword));
     }
 
 

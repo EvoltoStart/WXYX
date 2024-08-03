@@ -15,7 +15,7 @@ import java.util.List;
 @Api(tags = "菜单接口")
 @RestController
 @RequestMapping("/admin/acl/permission")
-@CrossOrigin
+//@CrossOrigin
 public class PermissionController {
     @Autowired
     private PermissionService permissionService;

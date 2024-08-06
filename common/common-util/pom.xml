@@ -12,6 +12,8 @@
     <artifactId>common-util</artifactId>
 
     <dependencies>
+
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

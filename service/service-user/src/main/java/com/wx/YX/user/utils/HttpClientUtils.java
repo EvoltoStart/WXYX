@@ -1,4 +1,4 @@
-package com.wx.YX.utils;
+package com.wx.YX.user.utils;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;

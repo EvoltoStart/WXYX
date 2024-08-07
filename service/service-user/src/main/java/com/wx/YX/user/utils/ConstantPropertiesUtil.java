@@ -1,4 +1,4 @@
-package com.wx.YX.utils;
+package com.wx.YX.user.utils;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;

@@ -252,5 +252,20 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
        return baseMapper.selectList(new LambdaQueryWrapper<SkuInfo>().like(SkuInfo::getSkuName,keyword));
     }
 
+    @Override
+    public List<SkuInfo> findNewPersonSkuInfoList() {
+        //条件一：is_new_person=1 是否为新用户
+        //条件二：publish_status=1 上架或下架状态
+        //条件三：显示其中三个
+        Page<SkuInfo> pageParam=new Page<>(1,3);
+        LambdaQueryWrapper<SkuInfo> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(SkuInfo::getIsNewPerson,1);
+        wrapper.eq(SkuInfo::getPublishStatus,1);
+        wrapper.orderByDesc(SkuInfo::getStock);
+        IPage<SkuInfo> skuInfoIPage=baseMapper.selectPage(pageParam,wrapper);
+        List<SkuInfo> skuInfoList=skuInfoIPage.getRecords();
+        return skuInfoList;
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package com.wx.YX.service;
+package com.wx.YX.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wx.YX.model.user.User;

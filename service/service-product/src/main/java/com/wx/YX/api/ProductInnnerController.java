@@ -48,4 +48,18 @@ public class ProductInnnerController {
         return skuInfoService.findSkuInfoByKeyword(keyword);
     }
 
+    //获取所有分类
+    @GetMapping("inner/findAllCategoryList")
+    public List<Category> findAllCategoryList(){
+       List<Category> categoryList= categoryService.list();
+       return categoryList;
+    }
+
+    //获取新人专享商品
+    @GetMapping("inner/findNewPersonSkuInfoList")
+    public List<SkuInfo> findNewPersonSkuInfoList(){
+        List<SkuInfo> list=skuInfoService.findNewPersonSkuInfoList();
+        return list;
+    }
+
 }

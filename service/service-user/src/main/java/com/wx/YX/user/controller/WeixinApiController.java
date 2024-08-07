@@ -1,6 +1,7 @@
-package com.wx.YX.controller;
+package com.wx.YX.user.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wx.YX.common.auth.AuthContextHolder;
 import com.wx.YX.common.constant.RedisConst;
 import com.wx.YX.common.exception.yxException;
 import com.wx.YX.common.result.Result;
@@ -8,19 +9,16 @@ import com.wx.YX.common.result.ResultCodeEnum;
 import com.wx.YX.common.utils.helper.JwtHelper;
 import com.wx.YX.enums.UserType;
 import com.wx.YX.model.user.User;
-import com.wx.YX.service.UserService;
-import com.wx.YX.utils.ConstantPropertiesUtil;
-import com.wx.YX.utils.HttpClientUtils;
+import com.wx.YX.user.service.UserService;
+import com.wx.YX.user.utils.ConstantPropertiesUtil;
+import com.wx.YX.user.utils.HttpClientUtils;
 import com.wx.YX.vo.user.LeaderAddressVo;
 import com.wx.YX.vo.user.UserLoginVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -116,5 +114,17 @@ public class WeixinApiController {
         UserLoginVo userLoginVo = this.userService.getUserLoginVo(user.getId());
         redisTemplate.opsForValue().set(RedisConst.USER_LOGIN_KEY_PREFIX + user.getId(), userLoginVo, RedisConst.USERKEY_TIMEOUT, TimeUnit.DAYS);
         return Result.ok(map);
+    }
+
+//添加更新微信用户方法
+    @PostMapping("/auth/updateUser")
+    @ApiOperation(value = "更新用户昵称与头像")
+    public Result updateUser(@RequestBody User user) {
+        User user1 = userService.getById(AuthContextHolder.getUserId());
+        //把昵称更新为微信用户
+        user1.setNickName(user.getNickName().replaceAll("[ue000-uefff]", "*"));//表情替换
+        user1.setPhotoUrl(user.getPhotoUrl());
+        userService.updateById(user1);
+        return Result.ok(null);
     }
 }

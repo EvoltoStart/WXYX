@@ -8,8 +8,13 @@ import com.wx.YX.model.search.SkuEs;
 import com.wx.YX.search.repository.SkureRepository;
 import com.wx.YX.search.service.SkuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -59,5 +64,18 @@ public class SkuServiceImpl implements SkuService {
     public void lowerSku(Long skuId) {
         skureRepository.deleteById(skuId);
 
+    }
+
+    //获取爆款商品
+    @Override
+    public List<SkuEs> findHotSkuList() {
+        //find  read get开头
+        //关联条件关键字
+        //0代表第一页
+        Pageable pageable= (Pageable) PageRequest.of(0,10);
+        Page<SkuEs> pageMode= skureRepository.findByOrderByHotScoreDesc(pageable);
+        List<SkuEs> skuEsList=pageMode.getContent();
+
+        return skuEsList;
     }
 }

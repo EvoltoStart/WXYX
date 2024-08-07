@@ -1,4 +1,4 @@
-package com.wx.YX.mapper;
+package com.wx.YX.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wx.YX.model.user.Leader;

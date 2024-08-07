@@ -1,16 +1,15 @@
-package com.wx.YX.service.impl;
+package com.wx.YX.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wx.YX.mapper.LeaderMapper;
-import com.wx.YX.mapper.UserDeliverMapper;
-import com.wx.YX.mapper.UserMapper;
+import com.wx.YX.user.mapper.LeaderMapper;
+import com.wx.YX.user.mapper.UserDeliverMapper;
+import com.wx.YX.user.mapper.UserMapper;
 import com.wx.YX.model.user.Leader;
 import com.wx.YX.model.user.User;
 import com.wx.YX.model.user.UserDelivery;
-import com.wx.YX.service.UserService;
+import com.wx.YX.user.service.UserService;
 import com.wx.YX.vo.user.LeaderAddressVo;
-import com.wx.YX.vo.user.LeaderVo;
 import com.wx.YX.vo.user.UserLoginVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

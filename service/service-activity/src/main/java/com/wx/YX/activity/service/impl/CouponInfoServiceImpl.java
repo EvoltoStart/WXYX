@@ -17,6 +17,7 @@ import com.wx.YX.model.activity.CouponRange;
 import com.wx.YX.model.product.Category;
 import com.wx.YX.model.product.SkuInfo;
 import com.wx.YX.vo.activity.CouponRuleVo;
+import com.wx.YX.vo.product.SkuInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -123,5 +124,16 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
         QueryWrapper<CouponInfo> couponInfoQueryWrapper = new QueryWrapper<>();
         couponInfoQueryWrapper.like("coupon_name",keyword);
         return couponInfoMapper.selectList(couponInfoQueryWrapper);
+    }
+
+    //根据skuid+userid查询优惠卷信息
+    @Override
+    public List<CouponInfo> findCouponInfoList(Long skuId,Long userId) {
+        //远程调用：根据skuid获取skuinfo
+        SkuInfoVo skuInfoVo = productFeignClient.getSkuInfoVo(skuId);
+
+        //根据条件查询：skuid+分类id+userid
+        List<CouponInfo> couponInfoList= baseMapper.seletcCouponInfoList(skuInfoVo.getId(),skuInfoVo.getCategoryId(),userId);
+        return couponInfoList;
     }
 }

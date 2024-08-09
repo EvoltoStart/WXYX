@@ -10,11 +10,13 @@ import com.wx.YX.activity.mapper.ActivityRuleMapper;
 import com.wx.YX.activity.mapper.ActivitySkuMapper;
 import com.wx.YX.activity.service.ActivityInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wx.YX.activity.service.CouponInfoService;
 import com.wx.YX.client.product.ProductFeignClient;
 import com.wx.YX.enums.ActivityType;
 import com.wx.YX.model.activity.ActivityInfo;
 import com.wx.YX.model.activity.ActivityRule;
 import com.wx.YX.model.activity.ActivitySku;
+import com.wx.YX.model.activity.CouponInfo;
 import com.wx.YX.model.product.SkuInfo;
 import com.wx.YX.vo.activity.ActivityRuleVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,8 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
 
     @Autowired
     private ProductFeignClient productFeignClient;
+    @Autowired
+    private CouponInfoService couponInfoService;
 
     @Override
     public IPage<ActivityInfo> selectPage(Page<ActivityInfo> pageParam) {
@@ -143,6 +147,9 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
         return activityRuleList;
     }
 
+
+
+    //构造规则名称的方法
     private String getRuleDesc(ActivityRule activityRule) {
         ActivityType activityType = activityRule.getActivityType();
         StringBuffer ruleDesc = new StringBuffer();
@@ -162,6 +169,62 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
                     .append("折");
         }
         return ruleDesc.toString();
+    }
+
+
+    @Override
+    public Map<Long, List<String>> findActivity(List<Long> skuIdList) {
+        Map<Long, List<String>> result = new HashMap<>();
+        //skuidList遍历，得到每个skuid
+        skuIdList.forEach(skuId -> {
+            //根据skuid查询，查询sku对应活动里的规则列表
+           List<ActivityRule> activityRuleList=baseMapper.findActivityRule(skuId);
+
+            //数据封装，规则名称
+            if(!CollectionUtils.isEmpty(activityRuleList)){
+                List<String> ruleList=new ArrayList<>();
+                //把规则名称处理
+                for(ActivityRule activityRule : activityRuleList) {
+                    //activityRule.setRuleDesc(this.getRuleDesc(activityRule));
+                    ruleList.add(this.getRuleDesc(activityRule));
+                }
+               //activityRuleList.stream().map(activityRule -> activityRule.getRuleDesc()).collect(Collectors.toList());
+                result.put(skuId,ruleList);
+
+            }
+        });
+
+
+
+
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> findActivityAndCoupon(Long skuId, Long userId) {
+        //根据skuid获取sku营销活动，一个活动有多个规则
+        List<ActivityRule> activityRuleList = this.findActivityRuleListBySkuId(skuId);
+
+
+        //根据skuid+userid查询优惠券信息
+        List<CouponInfo> couponInfoList= couponInfoService.findCouponInfoList(skuId,userId);
+
+
+        //封装map
+        Map<String,Object> map=new HashMap<>();
+        map.put("couponInfoList",couponInfoList);
+        map.put("activityRuleList",activityRuleList);
+        return map;
+    }
+
+    @Override
+    public List<ActivityRule> findActivityRuleListBySkuId(Long skuId) {
+        List<ActivityRule> activityRuleList = baseMapper.findActivityRule(skuId);
+        for(ActivityRule activityRule:activityRuleList){
+            String ruleDesc = this.getRuleDesc(activityRule);
+            activityRule.setRuleDesc(ruleDesc);
+        }
+        return activityRuleList;
     }
 
 }

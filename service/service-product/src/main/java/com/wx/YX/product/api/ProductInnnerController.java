@@ -1,9 +1,10 @@
-package com.wx.YX.api;
+package com.wx.YX.product.api;
 
 import com.wx.YX.model.product.Category;
 import com.wx.YX.model.product.SkuInfo;
 import com.wx.YX.product.service.CategoryService;
 import com.wx.YX.product.service.SkuInfoService;
+import com.wx.YX.vo.product.SkuInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +61,14 @@ public class ProductInnnerController {
     public List<SkuInfo> findNewPersonSkuInfoList(){
         List<SkuInfo> list=skuInfoService.findNewPersonSkuInfoList();
         return list;
+    }
+
+    //根据skuid获取sku信息
+    @GetMapping("inner/getSkuInfoVo/{skuId}")
+    public SkuInfoVo getSkuInfoVo(@PathVariable Long skuId){
+
+
+        return skuInfoService.getSkuInfoVo(skuId);
     }
 
 }

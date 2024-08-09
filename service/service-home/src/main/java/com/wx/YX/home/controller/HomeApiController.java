@@ -2,11 +2,13 @@ package com.wx.YX.home.controller;
 
 import com.wx.YX.common.auth.AuthContextHolder;
 import com.wx.YX.common.result.Result;
-import com.wx.YX.service.HomeService;
+import com.wx.YX.home.service.HomeService;
+import com.wx.YX.vo.search.SkuEsQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,4 +32,6 @@ public class HomeApiController {
             return Result.ok(map);
         }
     }
+
+
 }

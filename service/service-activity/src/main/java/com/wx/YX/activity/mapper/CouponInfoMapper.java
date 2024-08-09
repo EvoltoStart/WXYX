@@ -3,7 +3,10 @@ package com.wx.YX.activity.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wx.YX.model.activity.CouponInfo;
+import feign.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,4 +19,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CouponInfoMapper extends BaseMapper<CouponInfo> {
 
+    List<CouponInfo> seletcCouponInfoList(@Param("skuId") Long id, @Param("categoryId") Long categoryId, @Param("userId") Long userId);
 }

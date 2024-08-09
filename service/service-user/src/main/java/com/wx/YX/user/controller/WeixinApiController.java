@@ -14,6 +14,7 @@ import com.wx.YX.user.utils.ConstantPropertiesUtil;
 import com.wx.YX.user.utils.HttpClientUtils;
 import com.wx.YX.vo.user.LeaderAddressVo;
 import com.wx.YX.vo.user.UserLoginVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
+@Api(tags = "用户登录接口")
 @RestController
 @RequestMapping("/api/user/weixin")
 public class WeixinApiController {

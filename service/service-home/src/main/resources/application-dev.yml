@@ -1,5 +1,5 @@
 server:
-  port: 8897
+  port: 8898
 feign:
   sentinel:
     enabled: true

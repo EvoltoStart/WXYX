@@ -133,6 +133,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         return getSkuInfoDB(skuId);
     }
 
+
+
     private SkuInfoVo getSkuInfoDB(Long skuId) {
         SkuInfoVo skuInfoVo = new SkuInfoVo();
 

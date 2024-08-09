@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-@MapperScan("com.wx.YX.mapper")
+@MapperScan("com.wx.YX.user.mapper")
 public class ServiceUserApplication {
 
     public static void main(String[] args) {

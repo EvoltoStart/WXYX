@@ -1,17 +1,16 @@
-package com.wx.YX.service.impl;
+package com.wx.YX.home.service.impl;
 
 import com.wx.YX.client.product.ProductFeignClient;
 import com.wx.YX.client.search.SkuFeignClient;
 import com.wx.YX.client.user.UserFeignClient;
+import com.wx.YX.home.service.HomeService;
 import com.wx.YX.model.product.Category;
 import com.wx.YX.model.product.SkuInfo;
 import com.wx.YX.model.search.SkuEs;
-import com.wx.YX.service.HomeService;
 import com.wx.YX.vo.user.LeaderAddressVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

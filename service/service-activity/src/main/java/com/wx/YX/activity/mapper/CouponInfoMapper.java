@@ -20,4 +20,6 @@ import java.util.List;
 public interface CouponInfoMapper extends BaseMapper<CouponInfo> {
 
     List<CouponInfo> seletcCouponInfoList(@Param("skuId") Long id, @Param("categoryId") Long categoryId, @Param("userId") Long userId);
+
+    List<CouponInfo> selectCartCouponInfoList(@Param("userId") Long userId);
 }

@@ -4,6 +4,7 @@ package com.wx.YX.activity.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wx.YX.model.activity.ActivityInfo;
 import com.wx.YX.model.activity.ActivityRule;
+import com.wx.YX.model.activity.ActivitySku;
 import feign.Param;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +25,6 @@ public interface ActivityInfoMapper extends BaseMapper<ActivityInfo> {
     List<ActivityRule> selectActivityRuleList(@Param("skuId")Long skuId);
 
     List<ActivityRule> findActivityRule(@Param("skuId") Long skuId);
+
+    List<ActivitySku> selectCartActivityList(@Param("skuIdList") List<Long> skuIdList);
 }

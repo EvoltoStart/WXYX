@@ -100,6 +100,7 @@ public class ActivityInfoController {
      * @param keyword
      * @return
      */
+    @ApiOperation("根据关键字获取sku列表，活动使用")
     @GetMapping("findSkuInfoByKeyword/{keyword}")
     public Result findSkuInfoByKeyword(@PathVariable("keyword") String keyword) {
         return Result.ok(activityInfoService.findSkuInfoByKeyword(keyword));

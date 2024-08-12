@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class CartInfoServiceImpl implements CartInfoService {
@@ -158,6 +159,57 @@ public class CartInfoServiceImpl implements CartInfoService {
             });
         }
         return cartInfoList;
+    }
+
+    @Override
+    public void checkCart(Long userId, Integer isChecked, Long skuId) {
+        //获取redis的key
+        String cartKey=this.getCartKey(userId);
+        //cartKey 获取field-value
+        BoundHashOperations<String,String,CartInfo> boundHashOperations = redisTemplate.boundHashOps(cartKey);
+        //根据field（skuid）获取cartinfo
+        CartInfo cartInfo=boundHashOperations.get(skuId.toString());
+        if(cartInfo!=null){
+            cartInfo.setIsChecked(isChecked);
+            //更新
+            boundHashOperations.put(skuId.toString(),cartInfo);
+            //设置key过期时间
+            this.setCartKeyExpire(cartKey);
+        }
+    }
+
+    @Override
+    public void checkAllCart(Long userId, Integer isChecked) {
+        String cartKey =this.getCartKey(userId);
+        BoundHashOperations<String,String,CartInfo> boundHashOperations = redisTemplate.boundHashOps(cartKey);
+        List<CartInfo> cartInfoList = boundHashOperations.values();
+        cartInfoList.forEach(cartInfo -> {
+            cartInfo.setIsChecked(isChecked);
+            boundHashOperations.put(cartInfo.getSkuId().toString(),cartInfo);
+        });
+    }
+
+    @Override
+    public void batchCheckCart(List<Long> skuIdList, Long userId, Integer isChecked) {
+        String cartKey = getCartKey(userId);
+        //获取缓存对象
+        BoundHashOperations<String, String, CartInfo> hashOperations = redisTemplate.boundHashOps(cartKey);
+        skuIdList.forEach(skuId -> {
+            CartInfo cartInfo = hashOperations.get(skuId.toString());
+            cartInfo.setIsChecked(isChecked);
+            hashOperations.put(cartInfo.getSkuId().toString(), cartInfo);
+        });
+    }
+
+    @Override
+    public List<CartInfo> getCartCheckedList(Long userId) {
+        String cartKey=this.getCartKey(userId);
+        BoundHashOperations<String,String,CartInfo> boundHashOperations = redisTemplate.boundHashOps(cartKey);
+        List<CartInfo> cartInfoList = boundHashOperations.values();
+        List<CartInfo> cartInfoListNew = cartInfoList.stream().filter(cartInfo -> {
+            return cartInfo.getIsChecked().intValue() == 1;
+        }).collect(Collectors.toList());
+        return cartInfoListNew;
     }
 
 

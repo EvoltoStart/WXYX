@@ -107,4 +107,50 @@ public class CartApiController {
         OrderConfirmVo orderTradeVo = activityFenignClient.findCartActivityAndCoupon(cartInfoList,userId);
         return Result.ok(orderTradeVo);
     }
+
+    /**
+     * 更新选中状态
+     *
+     * @param skuId
+     * @param isChecked
+     * @param request
+     * @return
+     */
+    @ApiOperation("购物项选择状态")
+    @GetMapping("checkCart/{skuId}/{isChecked}")
+    public Result checkCart(@PathVariable(value = "skuId") Long skuId,
+                            @PathVariable(value = "isChecked") Integer isChecked, HttpServletRequest request) {
+        // 获取用户Id
+        Long userId = AuthContextHolder.getUserId();
+        // 调用更新方法
+        cartInfoService.checkCart(userId, isChecked, skuId);
+        return Result.ok();
+    }
+
+    @ApiOperation("全选")
+    @GetMapping("checkAllCart/{isChecked}")
+    public Result checkAllCart(@PathVariable(value = "isChecked") Integer isChecked, HttpServletRequest request) {
+        // 获取用户Id
+        Long userId = AuthContextHolder.getUserId();
+        // 调用更新方法
+        cartInfoService.checkAllCart(userId, isChecked);
+        return Result.ok();
+    }
+
+    @ApiOperation(value="批量选择购物车")
+    @PostMapping("batchCheckCart/{isChecked}")
+    public Result batchCheckCart(@RequestBody List<Long> skuIdList, @PathVariable(value = "isChecked") Integer isChecked, HttpServletRequest request){
+        // 如何获取userId
+        Long userId = AuthContextHolder.getUserId();
+        cartInfoService.batchCheckCart(skuIdList, userId, isChecked);
+        return Result.ok();
+    }
+
+
+    //获取购物车选中商品
+    @ApiOperation("获取购物车选中商品")
+    @GetMapping("inner/getCartCheckedList/{userId}")
+    public List<CartInfo> getCartCheckedList(@PathVariable("userId") Long userId) {
+        return cartInfoService.getCartCheckedList(userId);
+    }
 }

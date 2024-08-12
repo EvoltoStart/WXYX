@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SkuInfoMapper extends BaseMapper<SkuInfo> {
 
+    void unlockStock(Long skuId, Integer skuNum);
 }

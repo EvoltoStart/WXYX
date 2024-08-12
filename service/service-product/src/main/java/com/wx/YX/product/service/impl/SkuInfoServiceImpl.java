@@ -3,6 +3,9 @@ package com.wx.YX.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wx.YX.common.constant.RedisConst;
+import com.wx.YX.common.exception.yxException;
+import com.wx.YX.common.result.ResultCodeEnum;
 import com.wx.YX.model.product.SkuAttrValue;
 import com.wx.YX.model.product.SkuImage;
 import com.wx.YX.model.product.SkuInfo;
@@ -17,8 +20,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wx.YX.product.service.SkuPosterService;
 import com.wx.YX.vo.product.SkuInfoQueryVo;
 import com.wx.YX.vo.product.SkuInfoVo;
+import com.wx.YX.vo.product.SkuStockLockVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -56,6 +61,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
     //获取mq
     @Autowired
     private RabbitService rabbitService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     //获取sku分页列表
@@ -267,6 +275,37 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         IPage<SkuInfo> skuInfoIPage=baseMapper.selectPage(pageParam,wrapper);
         List<SkuInfo> skuInfoList=skuInfoIPage.getRecords();
         return skuInfoList;
+    }
+
+    @Override
+    public Boolean checkAndLock(List<SkuStockLockVo> skuStockLockVoList, String orderNo) {
+        //1、判断skuStockLockVoList是否为空
+        if(CollectionUtils.isEmpty(skuStockLockVoList)){
+            throw new yxException(ResultCodeEnum.DATA_ERROR);
+        }
+
+        //2、遍历集合每个商品，验证库存并锁定库存，具备原子性
+        skuStockLockVoList.forEach(skuStockLockVo -> {
+            this.checkLock(skuStockLockVo);
+        });
+        //3、只要一个商品锁定失败，所有锁定成功商品都解锁
+        boolean flag = skuStockLockVoList.stream().anyMatch(skuStockLockVo -> !skuStockLockVo.getIsLock());
+        if(flag){
+            //所有锁定车工商品解锁
+            skuStockLockVoList.stream().filter(SkuStockLockVo::getIsLock)
+                    .forEach(skuStockLockVo -> {
+                        baseMapper.unlockStock(skuStockLockVo.getSkuId(),skuStockLockVo.getSkuNum());
+                    });
+            //返回失败状态
+            return false;
+        }
+        //4、如果所有商品都锁定成功，redis缓存相关数据，为方便后面解锁和减库存
+        redisTemplate.opsForValue().set(RedisConst.SROCK_INFO+orderNo,skuStockLockVoList);
+        return true;
+    }
+
+    private void checkLock(SkuStockLockVo skuStockLockVo) {
+
     }
 
 

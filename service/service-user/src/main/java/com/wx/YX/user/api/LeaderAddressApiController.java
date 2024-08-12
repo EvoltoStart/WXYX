@@ -19,8 +19,6 @@ public class LeaderAddressApiController {
     @Resource
     private UserService userService;
 
-//    @Resource
-//    private LeaderService leaderService;
 
     @ApiOperation("提货点地址信息")
     @GetMapping("/inner/getUserAddressByUserId/{userId}")

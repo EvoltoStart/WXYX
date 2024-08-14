@@ -4,6 +4,8 @@ package com.wx.YX.client.product;
 import com.wx.YX.model.product.Category;
 import com.wx.YX.model.product.SkuInfo;
 import com.wx.YX.vo.product.SkuInfoVo;
+import com.wx.YX.vo.product.SkuStockLockVo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,4 +40,9 @@ public interface ProductFeignClient {
     //根据skuid获取sku信息
     @GetMapping("/api/product/inner/getSkuInfoVo/{skuId}")
     public SkuInfoVo getSkuInfoVo(@PathVariable Long skuId);
+
+    //验证和是锁定库存
+    @ApiOperation(value = "锁定库存")
+    @PostMapping("/api/product/inner/checkAndLock/{orderNo}")
+    public Boolean checkAndLock(@RequestBody List<SkuStockLockVo> skuStockLockVoList, @PathVariable("orderNo")String orderNo);
 }

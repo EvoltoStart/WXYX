@@ -34,7 +34,8 @@ public enum ResultCodeEnum {
     WARE_EXISTS(242,"仓库已存在"),
 
     WARE_NOT_EXISTS(243,"仓库不存在"),
-    ;
+    PAYMENT_FAIL(204,"支付出错" ),
+    PAYMENT_WAITING(206,"支付中" );
 
     private Integer code;
 

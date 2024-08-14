@@ -2,6 +2,7 @@ package com.wx.YX.product.mapper;
 
 import com.wx.YX.model.product.SkuInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import feign.Param;
 
 /**
  * <p>
@@ -13,5 +14,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SkuInfoMapper extends BaseMapper<SkuInfo> {
 
-    void unlockStock(Long skuId, Integer skuNum);
+    void unlockStock(@Param("skuId") Long skuId, @Param("skuNum") Integer skuNum);
+
+    SkuInfo checkStock(@Param("skuId") Long skuId, @Param("skuNum") Integer skuNum);
+
+    Integer lockStock(@Param("skuId") Long skuId, @Param("skuNum") Integer skuNum);
 }

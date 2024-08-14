@@ -2,6 +2,7 @@ package com.wx.YX.order.controller;
 
 import com.wx.YX.common.auth.AuthContextHolder;
 import com.wx.YX.common.result.Result;
+import com.wx.YX.model.order.OrderInfo;
 import com.wx.YX.order.service.OrderInfoService;
 import com.wx.YX.vo.order.OrderSubmitVo;
 import io.swagger.annotations.Api;
@@ -27,7 +28,7 @@ public class OrderApiController {
 
     @ApiOperation("生成订单")
     @PostMapping("auth/submitOrder")
-    public Result submitOrder(@RequestBody OrderSubmitVo orderParamVo, HttpServletRequest request) {
+    public Result submitOrders(@RequestBody OrderSubmitVo orderParamVo) {
         // 获取到用户Id
         Long userId = AuthContextHolder.getUserId();
         return Result.ok(orderService.submitOrder(orderParamVo));
@@ -35,7 +36,14 @@ public class OrderApiController {
 
     @ApiOperation("获取订单详情")
     @GetMapping("auth/getOrderInfoById/{orderId}")
-    public Result getOrderInfoById(@PathVariable("orderId") Long orderId){
+    public Result getOrderInfoByIdd(@PathVariable("orderId") Long orderId){
         return Result.ok(orderService.getOrderInfoById(orderId));
+    }
+
+    //根据orderNo查询订单信息
+    @GetMapping("inner/getOrderInfoByOrderNo/{orderNo}")
+    public OrderInfo getOrderInfoByOrderNo(@PathVariable("orderNo") String orderNo){
+        OrderInfo orderInfo=orderService.getOrderInfoByOrderNo(orderNo);
+        return orderInfo;
     }
 }

@@ -211,6 +211,24 @@ public class CartInfoServiceImpl implements CartInfoService {
         }).collect(Collectors.toList());
         return cartInfoListNew;
     }
+//
+    //跟据userid删除选中的购物车记录
+    @Override
+    public void deleteCartChecked(Long userId) {
+        //根据userid查询购物车记录
+        List<CartInfo> cartInfoList=this.getCartCheckedList(userId);
+        //查询list集合，得到每个skuid集合
+        List<Long> skuIdList = cartInfoList.stream().map(item -> item.getSkuId()).collect(Collectors.toList());
+
+        //构建redis的key值，hash类型key filed-value
+      String  cartKey=this.getCartKey(userId);
+        //根据key查询filed-value结构
+        BoundHashOperations<String,String,CartInfo> boundHashOperations = redisTemplate.boundHashOps(cartKey);
+        //根据filed(skuid)删除redis数据
+        skuIdList.forEach(skuId->{
+            boundHashOperations.delete(skuId.toString());
+        });
+    }
 
 
 }

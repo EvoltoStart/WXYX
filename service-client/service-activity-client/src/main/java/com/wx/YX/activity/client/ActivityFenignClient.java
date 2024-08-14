@@ -42,7 +42,17 @@ public interface ActivityFenignClient {
     @PostMapping("/api/activity/inner/findCartActivityAndCoupon/{userId}")
     OrderConfirmVo findCartActivityAndCoupon(@RequestBody List<CartInfo> cartInfoList, @PathVariable("userId") Long userId) ;
 
+    //获取购物车对应规则是数据
+    @PostMapping("/api/activity/inner/findCartActivityList")
+    public List<CartInfoVo> findCartActivityList(@RequestBody List<CartInfo> cartInfoList);
 
+    //获取购物车对应优惠券
+    @PostMapping("/api/activity/inner/findRangeSkuIdList/{couponId}")
+    public CouponInfo findRangeSkuIdList(@RequestBody List<CartInfo> cartInfoList, @PathVariable("couponId") Long couponId);
+
+    //更新优惠券状态
+    @GetMapping("/api/activity/inner/updateCouponInfoUseStatus/{couponId}/{userId}/{orderId}")
+    public Boolean updateCouponInfoUseStatus(@PathVariable("couponId") Long couponId,@PathVariable("userId") Long userId,@PathVariable("orderId") Long orderId);
 //    @ApiOperation(value = "根据活动id获取活动skuid列表")
 //    @GetMapping(value = "/api/activity/inner/findSkuIdList/{activityId}")
 //    List<Long> findSkuIdList(@PathVariable("activityId") Long activityId);

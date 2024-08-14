@@ -7,13 +7,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wx.YX.activity.mapper.CouponInfoMapper;
 import com.wx.YX.activity.mapper.CouponRangeMapper;
+import com.wx.YX.activity.mapper.CouponUseMapper;
 import com.wx.YX.activity.service.CouponInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wx.YX.client.product.ProductFeignClient;
 import com.wx.YX.enums.CouponRangeType;
+import com.wx.YX.enums.CouponStatus;
 import com.wx.YX.enums.CouponType;
 import com.wx.YX.model.activity.CouponInfo;
 import com.wx.YX.model.activity.CouponRange;
+import com.wx.YX.model.activity.CouponUse;
 import com.wx.YX.model.order.CartInfo;
 import com.wx.YX.model.product.Category;
 import com.wx.YX.model.product.SkuInfo;
@@ -44,6 +47,8 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
     private ProductFeignClient productFeignClient;
     @Autowired
     private CouponInfoMapper couponInfoMapper;
+    @Autowired
+    private CouponUseMapper couponUseMapper;
 
     @Override
     public IPage<CouponInfo> selectpage(Long page, Long limit) {
@@ -216,6 +221,20 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
         List<Long> skuIdList = couponIdToSkuIdMap.entrySet().iterator().next().getValue();
         couponInfo.setSkuIdList(skuIdList);
         return couponInfo;
+    }
+
+    //更新优惠券状态
+    @Override
+    public void updateCouponInfoUseStatu(Long couponId, Long userId, Long orderId) {
+        //根据couponId查询优惠券信息
+        CouponUse couponUse = couponUseMapper.selectOne(new LambdaQueryWrapper<CouponUse>()
+                .eq(CouponUse::getCouponId, couponId)
+                .eq(CouponUse::getUserId, userId)
+                .eq(CouponUse::getOrderId, orderId));
+        //设置修改值
+        couponUse.setCouponStatus(CouponStatus.USED);
+        //调用方法修改
+        couponUseMapper.updateById(couponUse);
     }
 
     /**

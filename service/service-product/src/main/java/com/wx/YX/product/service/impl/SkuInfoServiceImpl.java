@@ -21,6 +21,8 @@ import com.wx.YX.product.service.SkuPosterService;
 import com.wx.YX.vo.product.SkuInfoQueryVo;
 import com.wx.YX.vo.product.SkuInfoVo;
 import com.wx.YX.vo.product.SkuStockLockVo;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -64,6 +65,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private RedissonClient redissonClient;
 
 
     //获取sku分页列表
@@ -304,7 +307,28 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         return true;
     }
 
+    //遍历skuStickLockVoList得到每个商品
     private void checkLock(SkuStockLockVo skuStockLockVo) {
+        //获取锁,公平锁
+        RLock rLock = this.redissonClient.getFairLock(RedisConst.SKUKEY_PREFIX + skuStockLockVo.getSkuId());
+        rLock.lock();
+        try {
+            //验证库存
+           SkuInfo skuInfo= baseMapper.checkStock(skuStockLockVo.getSkuId(),skuStockLockVo.getSkuNum());
+           //没有满足条件商品，设置isLocck值为false
+            if(skuInfo==null){
+                skuStockLockVo.setIsLock(false);
+                return;
+            }
+            //满足条件商品，锁定库存：update
+            Integer rows=baseMapper.lockStock(skuStockLockVo.getSkuId(),skuStockLockVo.getSkuNum());
+            if(rows==1){
+                skuStockLockVo.setIsLock(true);
+            }
+        }finally {
+            rLock.unlock();
+        }
+
 
     }
 

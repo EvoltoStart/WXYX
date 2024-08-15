@@ -1,6 +1,8 @@
 package com.wx.YX.order.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wx.YX.activity.client.ActivityFenignClient;
 import com.wx.YX.cart.client.CartFeignClient;
 import com.wx.YX.client.product.ProductFeignClient;
@@ -26,6 +28,7 @@ import com.wx.YX.order.service.OrderItemService;
 import com.wx.YX.vo.order.CartInfoVo;
 import com.wx.YX.vo.order.OrderConfirmVo;
 import com.wx.YX.vo.order.OrderSubmitVo;
+import com.wx.YX.vo.order.OrderUserQueryVo;
 import com.wx.YX.vo.product.SkuStockLockVo;
 import com.wx.YX.vo.user.LeaderAddressVo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -433,5 +436,49 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     public OrderInfo getOrderInfoByOrderNo(String orderNo) {
         OrderInfo orderInfo = baseMapper.selectOne(new LambdaQueryWrapper<OrderInfo>().eq(OrderInfo::getOrderNo, orderNo));
         return orderInfo;
+    }
+
+    @Override
+    public void orderPay(String orderNo) {
+        //查询订单状态是否已经修改完成支付状态
+        OrderInfo orderInfo = this.getOrderInfoByOrderNo(orderNo);
+        if(orderInfo==null||orderInfo.getOrderStatus()!=OrderStatus.UNPAID){
+            return;
+        }
+        //更新状态
+        this.updateOrderStatus(orderInfo.getId());
+
+        //扣减库存
+        rabbitService.sendMessage(MqConst.EXCHANGE_ORDER_DIRECT,MqConst.ROUTING_MINUS_STOCK,orderNo);
+    }
+
+
+    //分页查询
+    @Override
+    public IPage<OrderInfo> findUserOrderPage(Page<OrderInfo> pageParam, OrderUserQueryVo orderUserQueryVo) {
+       LambdaQueryWrapper<OrderInfo> wrapper=new LambdaQueryWrapper<>();
+       wrapper.eq(OrderInfo::getUserId, orderUserQueryVo.getUserId());
+       wrapper.eq(OrderInfo::getOrderStatus, orderUserQueryVo.getOrderStatus());
+        Page<OrderInfo> pageModel = baseMapper.selectPage(pageParam, wrapper);
+        //获取每个订单把每个订单里订单项查询封装
+        List<OrderInfo> orderInfoList=pageModel.getRecords();
+        for (OrderInfo orderInfo:orderInfoList) {
+            //根据订单id查询所有订单项列表
+            List<OrderItem> orderItemList = orderItemMapper.selectList(
+                    new LambdaQueryWrapper<OrderItem>().eq(OrderItem::getOrderId, orderInfo.getId())
+            );
+            //把订单项集合封装到每个订单里
+            orderInfo.setOrderItemList(orderItemList);
+            //封装订单状态名称
+            orderInfo.getParam().put("orderStatusName", orderInfo.getOrderStatus());
+        }
+        return pageModel;
+    }
+
+    private void updateOrderStatus(Long id) {
+        OrderInfo orderInfo = baseMapper.selectById(id);
+        orderInfo.setOrderStatus(OrderStatus.WAITING_DELEVER);
+        orderInfo.setProcessStatus(ProcessStatus.WAITING_DELEVER);
+        baseMapper.updateById(orderInfo);
     }
 }
